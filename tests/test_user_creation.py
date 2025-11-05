@@ -12,12 +12,6 @@ class TestUsers:
         assert response.status_code == 200
         assert response.json()["success"] is True
 
-        # Очистка (удаляем пользователя после теста, если создан)
-        login_res = client.post("/auth/login", {"email": user["email"], "password": user["password"]})
-        token = login_res.json().get("accessToken")
-        if token:
-            headers = {"Authorization": token}
-            client.delete("/auth/user", headers=headers)
 
     @allure.title("Создание пользователя, который уже зарегистрирован")
     @allure.description("Тест проверяет, что нельзя создать пользователя с уже существующей почтой. Ожидается статус 403 и сообщение 'User already exists'.")
