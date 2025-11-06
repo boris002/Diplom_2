@@ -1,10 +1,10 @@
 import requests
 
-BASE_URL = "https://stellarburgers.education-services.ru/api"
+
 
 class ApiClient:
-    def __init__(self):
-        self.base_url = BASE_URL
+    def __init__(self,base_url):
+        self.base_url = base_url
 
     def post(self, endpoint, data=None, headers=None):
         return requests.post(f"{self.base_url}{endpoint}", json=data, headers=headers)

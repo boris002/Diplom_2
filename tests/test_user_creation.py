@@ -1,5 +1,6 @@
 import allure
 from data.user_data import generate_user
+from data.urls import AuthEndpoints
 
 @allure.epic("Создание пользователя")
 class TestUsers:
@@ -8,7 +9,7 @@ class TestUsers:
     @allure.description("Тест проверяет успешное создание нового пользователя с валидными данными. Ожидается статус 200 и success=True.")
     def test_create_unique_user_success(self, client):
         user = generate_user()
-        response = client.post("/auth/register", user)
+        response = client.post(AuthEndpoints.REGISTER, user)
         assert response.status_code == 200
         assert response.json()["success"] is True
 
@@ -20,7 +21,7 @@ class TestUsers:
         # первый раз создаём пользователя (через фикстуру)
         client.post("/auth/register", user_data)
         # пытаемся создать повторно
-        response = client.post("/auth/register", user_data)
+        response = client.post(AuthEndpoints.REGISTER, user_data)
         assert response.status_code == 403
         assert response.json()["message"] == "User already exists"
 
@@ -32,6 +33,6 @@ class TestUsers:
             "email": "testuser@example.com"
             # пароль отсутствует
         }
-        response = client.post("/auth/register", user_data)
+        response = client.post(AuthEndpoints.REGISTER, user_data)
         assert response.status_code == 403
         assert response.json()["message"] == "Email, password and name are required fields"
